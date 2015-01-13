@@ -1,0 +1,91 @@
+at ATCA2000:
+ATCA2000-CIT:~# sbutil megaraid   show
+SANBlaze ATCA2000 Configuration Utility, Revision: 1.296 Date: 2011/07/20 16:43
+(megaraid arrays) --------------------------------------------------------------
+    arrayID   type   size      state              vendor   model             rev
+--------------------------------------------------------------------------------
+  1 [    0:0  ] RAID5   4.55 TB Optimal   ADRAWB-WBBBU-DIO-DC-SS: 256 KB
+
+        5/5   SAS    931.51 GB Online, Spun Up    SEAGATE  ST91000640SS     0002
+        5/6   SAS    931.51 GB Online, Spun Up    SEAGATE  ST91000640SS     0002
+        5/7   SAS    931.51 GB Online, Spun Up    SEAGATE  ST91000640SS     0002
+        5/8   SAS    931.51 GB Online, Spun Up    SEAGATE  ST91000640SS     0002
+    65535/12  SAS    931.51 GB Online, Spun Up    SEAGATE  ST91000640SS     0002
+    65535/13  SAS    931.51 GB Online, Spun Up    SEAGATE  ST91000640SS     0002
+
+ATCA2000-CIT:~# sbutil  lvm  show
+WARNING: Detected active GUI session by user admin.  Last activity 157s ago.
+Will log off after 1200s of inactivity
+SANBlaze ATCA2000 Configuration Utility, Revision: 1.296 Date: 2011/07/20 16:43
+(volume group vga) -------------------------------------------------------------
+volume     system name         size      free
+(vga)     /dev/vga            5584GB    5085GB
+          /dev/sdb            5585GB    5085GB
+(logical volume) ---------------------------------------------------------------
+          /dev/vga/lva0      500.0GB     online
+
+ATCA2000-CIT:~# sbutil iscsi show
+WARNING: Detected active GUI session by user admin.  Last activity 294s ago.
+Will log off after 1200s of inactivity
+SANBlaze ATCA2000 Configuration Utility, Revision: 1.296 Date: 2011/07/20 16:43
+(iSCSI devices) ----------------------------------------------------------------
+  Alias/LUN#                        iqn / Volume Name
+1.     Target0 - iqn.2001-04.com.sanblaze:ATCA2000-CIT.Target0
+2. LUN0Target0 - /export/iSCSI/share001
+3.     Target1 - iqn.2001-04.com.sanblaze:ATCA2000-CIT.Target1
+
+iSCSI enterprise target is running at pid 5222
+
+At CPM9 blade:
+root@ATCA-4600@4-3-11:~# iscsiadm -m discovery -t st -p 10.10.10.12
+Starting iscsid: Loading iSCSI transport class v2.0-870.
+iscsi: registered transport (tcp)
+iscsi: registered transport (iser)
+libcxgbi:libcxgbi_init_module: tag itt 0x1fff, 13 bits, age 0xf, 4 bits.
+libcxgbi:ddp_setup_host_page_size: system PAGE 4096, ddp idx 0.
+Chelsio T3 iSCSI Driver cxgb3i v2.0.0 (Jun. 2010)
+iscsi: registered transport (cxgb3i)
+Chelsio T4 iSCSI Driver cxgb4i v0.9.1 (Aug. 2010)
+iscsi: registered transport (cxgb4i)
+cnic: Broadcom NetXtreme II CNIC Driver cnic v2.2.14 (Mar 30, 2011)
+Broadcom NetXtreme II iSCSI Driver bnx2i v2.6.2.3 (Jan 06, 2010)
+iscsi: registered transport (bnx2i)
+iscsi: registered transport (be2iscsi)
+[  OK  ]
+10.10.10.12:3260,1 iqn.2001-04.com.sanblaze:ATCA2000-CIT.Target1
+10.100.19.212:3260,1 iqn.2001-04.com.sanblaze:ATCA2000-CIT.Target1
+
+root@ATCA-4600@4-3-11:~# iscsiadm -m node
+10.10.10.12:3260,1 iqn.2001-04.com.sanblaze:ATCA2000-CIT.Target1
+10.100.19.212:3260,1 iqn.2001-04.com.sanblaze:ATCA2000-CIT.Target1
+
+
+root@ATCA-46XX@4-3-11:~# iscsiadm -m node --login
+Logging in to [iface: default, target: iqn.2001-04.com.sanblaze:ATCA2000-CIT.Target1, portal: 10.10.10.12,3260]
+Logging in to [iface: default, target: iqn.2001-04.com.sanblaze:ATCA2000-CIT.Target0, portal: 10.10.10.12,3260]
+scsi7 : iSCSI Initiator over TCP/IP
+scsi8 : iSCSI Initiator over TCP/IP
+scsi 8:0:0:0: Direct-Access     SANBlaze ATCA2000         1.0  PQ: 0 ANSI: 4
+Login to [iface: default, target: iqn.2001-04.com.sanblaze:ATCA2000-CIT.Target1, portal: 10.10.10.12,3260] successful.
+Login to [iface: default, target: iqn.2001-04.com.sanblaze:ATCA2000-CIT.Target0, portal: 10.10.10.12,3260] successful.
+sd 8:0:0:0: [sda] 1048576000 512-byte logical blocks: (536 GB/500 GiB)
+sd 8:0:0:0: [sda] Write Protect is off
+root@ATCA-46XX@4sd 8:0:0:0: [sda] Write cache: disabled, read cache: disabled, doesn't support DPO or FUA
+-3-11:~#  sda: sda1
+sd 8:0:0:0: [sda] Attached SCSI disk
+sd 8:0:0:0: Attached scsi generic sg0 type 0
+
+root@ATCA-4600@4-3-11:~# lsscsi
+[7:0:0:0]    disk    SANBlaze ATCA2000         1.0   /dev/sda
+
+root@ATCA-46XX@4-3-11:~# fdisk -l
+
+Disk /dev/sda: 536.9 GB, 536870912000 bytes
+255 heads, 63 sectors/track, 65270 cylinders
+Units = cylinders of 16065 * 512 = 8225280 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk identifier: 0x1db31a9a
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1               1       65270   524281243+  83  Linux

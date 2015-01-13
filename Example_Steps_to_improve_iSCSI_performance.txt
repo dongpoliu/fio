@@ -1,0 +1,13 @@
+root@localhost@4-3-11:/mnt# blockdev --getra /dev/sda1
+256
+root@localhost@4-3-11:/mnt# blockdev --setra 16384 /dev/sda1
+root@localhost@4-3-11:/mnt# blockdev --getra /dev/sda1
+16384
+root@localhost@4-3-11:/mnt# echo 16777216 > /proc/sys/net/core/wmem_max
+root@localhost@4-3-11:/mnt# echo 16777216 > /proc/sys/net/core/rmem_max
+root@localhost@4-3-11:/mnt# echo 65536 > /proc/sys/net/core/wmem_default
+root@localhost@4-3-11:/mnt# echo 87380 > /proc/sys/net/core/rmem_default
+root@localhost@4-3-11:/mnt# echo "24576 36864 49152" > /proc/sys/net/ipv4/tcp_mem
+root@localhost@4-3-11:/mnt# echo "4096 87380 16777216" > /proc/sys/net/ipv4/tcp_rmem
+root@localhost@4-3-11:/mnt# echo "4096 65536 16777216" > /proc/sys/net/ipv4/tcp_wmem
+root@localhost@4-3-11:/mnt# echo "10000" > /proc/sys/net/core/netdev_max_backlog
